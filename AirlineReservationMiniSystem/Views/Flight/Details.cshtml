@@ -1,0 +1,106 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlightDetailsViewModel
+@inject IAuthorizationService AuthorizationService
+@{
+    var isAgentAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAgent");
+    var isClientAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsClient");
+    var isAdminAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAdmin");
+}
+
+<br />
+<h2 class="text-info">Flight</h2>
+<br />
+<div class="border container" style="padding:30px;">
+    <form method="@(isClientAuthorizationResult.Succeeded ? "post" : "get")">
+        @if (Model.Flight.FlightId != 0)
+        {
+            <input type="hidden" asp-for="Flight.FlightId" />
+        }
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.DepartureCity"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.DepartureCity" class="form-control" disabled>
+                <span asp-validation-for="Flight.DepartureCity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.DestinationCity"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.DestinationCity" class="form-control" disabled>
+                <span asp-validation-for="Flight.DestinationCity" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.DepartureDateTime"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.DepartureDateTime" class="form-control" disabled>
+                <span asp-validation-for="Flight.DepartureDateTime" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.TotalNumberOfSeats"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.TotalNumberOfSeats" class="form-control" disabled>
+                <span asp-validation-for="Flight.TotalNumberOfSeats" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.NumberOfFreeSeats"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.NumberOfFreeSeats" class="form-control" disabled>
+                <span asp-validation-for="Flight.NumberOfFreeSeats" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3">
+                <label asp-for="Flight.NumberOfConnections"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Flight.NumberOfConnections" class="form-control" disabled>
+                <span asp-validation-for="Flight.NumberOfConnections" class="text-danger"></span>
+            </div>
+        </div>
+        @if (isClientAuthorizationResult.Succeeded)
+        {
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="NumberOfSeats"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="NumberOfSeats" class="form-control">
+                    <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        <div class="form-group row">
+            <div class="col-3 offset-3">
+                <a asp-action="BackToList" class="btn btn-success form-control">Back to List</a>
+            </div>
+            <div class="col-3">
+                <button asp-action="@(isClientAuthorizationResult.Succeeded ? "Reserve" : "Upsert")" asp-route-id="@Model.Flight.FlightId" type="submit" class="btn btn-primary form-control">
+                    @(isClientAuthorizationResult.Succeeded ? "Reserve" : "Edit")
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

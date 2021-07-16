@@ -1,0 +1,99 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlightListViewModel
+@inject IAuthorizationService AuthorizationService
+@{
+    var isAgentAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAgent");
+    var isClientAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsClient");
+    var isAdminAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAdmin");
+}
+<br />
+<div class="container row p-0 m-0">
+    <div class="col-6">
+        <h2 class="text-info">Flight List</h2>
+    </div>
+    @if (isAgentAuthorizationResult.Succeeded)
+    {
+        <div class="col-3 offset-3">
+            <a asp-action="Upsert" asp-controller="Flight" class="btn btn-info form-control text-white">
+                Add New Flight
+            </a>
+        </div>
+    }
+    <div class="col-12 border p-3">
+        <form method="post">
+            @if (Model.Flights.Count() > 0)
+            {
+                <table class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Departure City</th>
+                            <th>Destination City</th>
+                            <th>Departure Time</th>
+                            <th>Total Number Of Seats</th>
+                            <th>Free Seats</th>
+                            <th>Number of Connections</th>
+
+                            <th></th>
+                        </tr>
+
+                    </thead>
+                    @foreach (var item in Model.Flights)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.DepartureCity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.DestinationCity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.DepartureDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.TotalNumberOfSeats)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NumberOfFreeSeats)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.NumberOfConnections)
+                            </td>
+
+                            <td>
+                                @if (isAdminAuthorizationResult.Succeeded)
+                                {
+                                    <button asp-page-handler="Delete" asp-route-id="@item.FlightId" onclick="return confirm('Are you sure you want to cancel a Flight?')" class="btn btn-danger btn-sm">Cancel</button>
+                                }
+                                @if (isAgentAuthorizationResult.Succeeded)
+                                {
+                                    <a asp-action="Upsert" asp-route-id="@item.FlightId" class="btn btn-success btn-sm text-white">Edit</a>
+                                }
+                                @if (isClientAuthorizationResult.Succeeded)
+                                {
+                                    <a asp-action="Select" asp-route-id="@item.FlightId" class="btn btn-success btn-sm text-white">Select</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            }
+            else
+            {
+                <p>No Flights available.</p>
+            }
+        </form>
+        <div class="col-3 offset-9">
+            <a asp-action="Index" class="btn btn-info form-control text-white">
+                Back
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
