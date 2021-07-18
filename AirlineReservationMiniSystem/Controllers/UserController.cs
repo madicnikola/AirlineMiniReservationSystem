@@ -13,11 +13,11 @@ namespace AirlineReservationMiniSystem.Controllers
 {
 	public class UserController : Controller
 	{
-		private List<UserViewModel> userViewModels = new List<UserViewModel>();
+		private readonly List<UserViewModel> userViewModels = new List<UserViewModel>();
 		private readonly IUserRepository _userRepository;
 		private readonly IRoleRepository _roleRepository;
-		[BindProperty]
-		public UserViewModel Input { get; set; }
+
+		[BindProperty] public UserViewModel Input { get; set; }
 
 
 		public UserController(IUserRepository userRepository, IRoleRepository roleRepository)
@@ -76,7 +76,7 @@ namespace AirlineReservationMiniSystem.Controllers
 			{
 				if (Input.User.Id == null)
 				{
-					return View();
+					return View("Details");
 				}
 				else
 				{

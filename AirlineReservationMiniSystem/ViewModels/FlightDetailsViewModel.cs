@@ -14,5 +14,10 @@ namespace AirlineReservationMiniSystem.ViewModels
 		[Required]
 		[DisplayName("Number of Seats to Reserve")]
 		public int NumberOfSeats { get; set; }
+
+		public ReservationRequest ReservationRequest { get; set; }
+		
+		public SearchFlightsViewModel SearchFlightsViewModel { get; set; }
+
 	}
 }

@@ -7,10 +7,16 @@ namespace AirlineReservationMiniSystem.Models
 {
 	public interface IReservationRepository
 	{
-		IEnumerable<Reservation> AllReservations { get; }
+		Task<List<Reservation>> AllReservations();
 
-		IEnumerable<Reservation> ReservationsByStatus(ReservationStatus status);
+		Task<List<Reservation>> ReservationsByStatus(ReservationStatus status);
 
-		Reservation GetReservationById(int reservationId);
+		Task<Reservation> GetReservationById(int reservationId);
+		
+		Task<int> Add(Reservation reservation);
+
+		Task<Reservation> GetReservationByUserAndFLightAndDate(int flightFlightId, string userId, DateTime reservationDateOfReservation);
+
+		Task<List<Reservation>> getReservationsByUserId(string userId);
 	}
 }

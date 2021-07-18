@@ -10,7 +10,7 @@ namespace AirlineReservationMiniSystem.Models
 		Task<IEnumerable<Flight>> AllFlights();
 		IEnumerable<Flight> FlightsByDate(DateTime dateTime);
 		Task<IEnumerable<Flight>> SearchFlights(City departureCity, City destinationCity, DateTime dateTime,bool DirentFlight);
-		Flight GetFlightById(int flightId);
+		Task<Flight> GetFlightById(int flightId);
 
 		Task<int> Add(Flight flight);
 		Task<int> Update(Flight flight);

@@ -17,9 +17,9 @@ namespace AirlineReservationMiniSystem.Models
 			};
 			return list;
 		}
-		public IEnumerable<Flight> FlightsByDate {get;}
+		public Task<IEnumerable<Flight>> FlightsByDate {get;}
 
-		public Flight GetFlightById(int flightId)
+		public async Task<Flight> GetFlightById(int flightId)
 		{
 			var list =AllFlights();
 			if (list.IsCompletedSuccessfully)

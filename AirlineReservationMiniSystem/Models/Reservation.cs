@@ -10,7 +10,7 @@ namespace AirlineReservationMiniSystem.Models
 	{
 		public int ReservationId { get; set; }
 		public Flight Flight { get; set; }
-		public ApplicationUser User { get; set; }
+		public string UserId { get; set; }
 		public DateTime DateOfReservation { get; set; }
 		public ReservationStatus Status { get; set; }
 

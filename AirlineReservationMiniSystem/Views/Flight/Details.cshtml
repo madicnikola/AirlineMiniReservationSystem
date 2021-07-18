@@ -19,7 +19,7 @@
     <form method="@(isClientAuthorizationResult.Succeeded ? "post" : "get")">
         @if (Model.Flight.FlightId != 0)
         {
-            <input type="hidden" asp-for="Flight.FlightId" />
+            <input id="FlightId" type="hidden" asp-for="Flight.FlightId" />
         }
         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
         <div class="form-group row">
@@ -27,13 +27,13 @@
                 <label asp-for="Flight.DepartureCity"></label>
             </div>
             <div class="col-6">
-                <input asp-for="Flight.DepartureCity" class="form-control" disabled>
+                <input id="DepartureCity" asp-for="Flight.DepartureCity" class="form-control" disabled>
                 <span asp-validation-for="Flight.DepartureCity" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-3">
-                <label asp-for="Flight.DestinationCity"></label>
+                <label id="DestinationCity" asp-for="Flight.DestinationCity"></label>
             </div>
             <div class="col-6">
                 <input asp-for="Flight.DestinationCity" class="form-control" disabled>
@@ -83,24 +83,35 @@
                     <label asp-for="NumberOfSeats"></label>
                 </div>
                 <div class="col-6">
-                    <input asp-for="NumberOfSeats" class="form-control">
+                    <input id="NumberOfSeats" asp-for="NumberOfSeats" class="form-control">
                     <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
                 </div>
             </div>
         }
-        <div class="form-group row">
-            <div class="col-3 offset-3">
-                <a asp-action="BackToList" class="btn btn-success form-control">Back to List</a>
-            </div>
+
+    <div class="form-group row">
+        <div class="col-3 offset-3">
+                            <a href="javascript:history.go(-1)" class="btn btn-success form-control">Back</a>
+        </div>
+        @if (isClientAuthorizationResult.Succeeded)
+        {
             <div class="col-3">
-                <button asp-action="@(isClientAuthorizationResult.Succeeded ? "Reserve" : "Upsert")" asp-route-id="@Model.Flight.FlightId" type="submit" class="btn btn-primary form-control">
-                    @(isClientAuthorizationResult.Succeeded ? "Reserve" : "Edit")
+                <button id="submitReservation" class="btn btn-primary form-control">
+                Reserve
                 </button>
             </div>
+        }
+        else
+        {
+        <div class="col-3">
+            <button asp-action="Upsert" asp-route-id="@Model.Flight.FlightId" type="submit" class="btn btn-primary form-control">
+                Edit
+            </button>
         </div>
-    </form>
+        }
+    </div>
+</form>
 </div>
-
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
 }

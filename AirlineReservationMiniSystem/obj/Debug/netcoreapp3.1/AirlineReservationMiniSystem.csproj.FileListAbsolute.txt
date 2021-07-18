@@ -861,13 +861,13 @@ C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservati
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Areas\Identity\Pages\_ViewStart.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
-C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Reservation\List.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\Index.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\_List.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\User\Index.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\_FlightCard.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\_SearchFlightsCard.cshtml.g.cs
-C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\FindFlights.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\IndexAgentView.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\User\Details.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\User\Edit.cshtml.g.cs
+C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\FlightList.cshtml.g.cs
+C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Reservation\Index.cshtml.g.cs

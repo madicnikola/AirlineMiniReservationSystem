@@ -10,7 +10,7 @@
 <br />
 <div class="border container" style="padding:30px;">
     <form method="post">
-        @if (Model != null)
+        @if (Model.User != null)
         {
             <input type="hidden" asp-for="User.Id" />
         }

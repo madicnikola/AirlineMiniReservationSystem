@@ -15,22 +15,38 @@ namespace AirlineReservationMiniSystem.Models
 			_appDbContext = appDbContext;
 		}
 
-		public IEnumerable<Reservation> AllReservations {
-			get
-			{
-				return _appDbContext.Reservations.Include(r => r.User).Include(r => r.Flight);
-			}
-		
+		public Task<List<Reservation>> AllReservations()
+		{
+			return _appDbContext.Reservations.Include(r => r.Flight).ToListAsync();
 		}
 
-		public IEnumerable<Reservation> ReservationsByStatus(ReservationStatus status)
+		public Task<List<Reservation>> ReservationsByStatus(ReservationStatus status)
 		{
-				return _appDbContext.Reservations.Include(r => r.User).Include(r => r.Flight).Where(r => r.Status == status);
+			return _appDbContext.Reservations.Where(r => r.Status == status).Include(r => r.Flight)
+				.ToListAsync();
 		}
 
-	public Reservation GetReservationById(int reservationId)
+		public Task<Reservation> GetReservationById(int reservationId)
 		{
-			return _appDbContext.Reservations.FirstOrDefault(r => r.ReservationId == reservationId);
+			return _appDbContext.Reservations.FirstOrDefaultAsync(r => r.ReservationId == reservationId);
+		}
+
+		public Task<int> Add(Reservation reservation)
+		{
+			_appDbContext.Reservations.Add(reservation);
+			return _appDbContext.SaveChangesAsync();
+		}
+
+		public Task<Reservation> GetReservationByUserAndFLightAndDate(int flightId, string userId, DateTime DateOfReservation)
+		{
+			return _appDbContext.Reservations.FirstOrDefaultAsync(r => r.Flight.FlightId == flightId &&
+			                                                           r.UserId == userId &&
+			                                                           r.DateOfReservation == DateOfReservation);
+		}
+
+		public Task<List<Reservation>> getReservationsByUserId(string userId)
+		{
+			return _appDbContext.Reservations.Where(r => r.UserId == userId).ToListAsync();
 		}
 	}
 }

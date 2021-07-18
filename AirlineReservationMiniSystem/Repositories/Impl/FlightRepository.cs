@@ -25,9 +25,9 @@ namespace AirlineReservationMiniSystem.Models
 				return _appDbContext.Flights.Where(f => f.DepartureDateTime == dateTime);
 		}
 
-		public Flight GetFlightById(int flightId)
+		public Task<Flight> GetFlightById(int flightId)
 		{
-			return _appDbContext.Flights.FirstOrDefault(f => f.FlightId == flightId);
+			return _appDbContext.Flights.FirstOrDefaultAsync(f => f.FlightId == flightId);
 		}
 
 		public Task<int> Add(Flight flight)
@@ -41,9 +41,8 @@ namespace AirlineReservationMiniSystem.Models
 		  return _appDbContext.Flights.Where(f => f.DepartureCity == departureCity
 												&& f.DestinationCity == destinationCity
 												&& f.DepartureDateTime.Date == dateTime.Date
-												&& f.DepartureDateTime.TimeOfDay >= dateTime.TimeOfDay
 												&& f.NumberOfFreeSeats > 0
-												&& (directFlight ? f.NumberOfConnections==0 : true) 
+												&& (!directFlight || f.NumberOfConnections==0) 
 												);
 		}
 

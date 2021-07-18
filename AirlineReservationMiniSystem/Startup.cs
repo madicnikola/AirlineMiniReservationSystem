@@ -36,6 +36,7 @@ namespace AirlineReservationMiniSystem
 			services.AddScoped<IReservationRepository, ReservationRepository>();
 			services.AddScoped<IRoleRepository, RoleRepository>();
 
+			services.AddSignalR(c => c.EnableDetailedErrors = true);
 			//services.AddTransient()
 			//services.AddSingleton()
 
@@ -48,8 +49,6 @@ namespace AirlineReservationMiniSystem
 			   options.AddPolicy("IsClient", policy =>
 			   policy.RequireRole("Client"));
 		   });
-
-
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

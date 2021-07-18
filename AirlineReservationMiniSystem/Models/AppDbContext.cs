@@ -16,8 +16,6 @@ namespace AirlineReservationMiniSystem.Models
 
 		public DbSet<Reservation> Reservations { get; set; }
 		public DbSet<Flight> Flights { get; set; }
-		public DbSet<ApplicationUser> UsersDbSet { get; set; }
-
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);

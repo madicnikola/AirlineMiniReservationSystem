@@ -10,170 +10,180 @@ using System.Threading.Tasks;
 
 namespace AirlineReservationMiniSystem.Controllers
 {
-	[Authorize]
-	public class FlightController : Controller
-	{
-		private readonly IFlightRepository _flightRepository;
-		private readonly IReservationRepository _reservationRepository;
-		private readonly IUserRepository _userRepository;
-		private readonly IAuthorizationService _authorizationService;
+    [Authorize]
+    public class FlightController : Controller
+    {
+        private readonly IFlightRepository _flightRepository;
+        private readonly IReservationRepository _reservationRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-		[BindProperty]
-		public Flight Flight { get; set; }
+        [BindProperty] public Flight Flight { get; set; }
 
-		public List<Flight> Flights { get; set; }
+        public List<Flight> Flights { get; set; }
 
-		[BindProperty]
-		public FlightListViewModel FlightListModel { get; set; }
-		public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository, IUserRepository userRepository, IAuthorizationService authorizationService)
-		{
-			_flightRepository = flightRepository;
-			_reservationRepository = reservationRepository;
-			_userRepository = userRepository;
-			_authorizationService = authorizationService;
-		}
+        [BindProperty] public FlightListViewModel FlightListModel { get; set; }
 
-		public async Task<IActionResult> Index()
-		{
-			var result = await _authorizationService.AuthorizeAsync(User, "IsAgent");
-			if (result.Succeeded)
-			{
-				var allFlights = await _flightRepository.AllFlights();
-				var viewModel = new SearchFlightsViewModel
-				{
-					Flights = allFlights
-				};
-				return View("IndexAgentView", viewModel);
-			}
+        public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository,
+            IUserRepository userRepository, IAuthorizationService authorizationService)
+        {
+            _flightRepository = flightRepository;
+            _reservationRepository = reservationRepository;
+            _userRepository = userRepository;
+            _authorizationService = authorizationService;
+        }
 
-			return View();
-		}
+        public async Task<IActionResult> Index()
+        {
+            var result = await _authorizationService.AuthorizeAsync(User, "IsAgent");
+            if (result.Succeeded)
+            {
+                var allFlights = await _flightRepository.AllFlights();
+                var viewModel = new SearchFlightsViewModel
+                {
+                    Flights = allFlights
+                };
+                return View("IndexAgentView", viewModel);
+            }
 
-		[HttpPost]
-		[Authorize(Policy = "isAgent")]
-		public async Task<IActionResult> Upsert()
-		{
-			if (ModelState.IsValid)
-			{
-				if (Flight.FlightId == 0)
-				{
-					await _flightRepository.Add(Flight);
-				}
-				else
-				{
-					  await _flightRepository.Update(Flight);
+            return View();
+        }
 
-				}
-			}
-			var routeValues = new RouteValueDictionary {
-				{ "id", Flight.FlightId } };
-			string url = "Details";
-			return RedirectToAction(url, routeValues);
-		}
+        [HttpPost]
+        [Authorize(Policy = "isAgent")]
+        public async Task<IActionResult> Upsert()
+        {
+            if (ModelState.IsValid)
+            {
+                if (Flight.FlightId == 0)
+                {
+                    await _flightRepository.Add(Flight);
+                }
+                else
+                {
+                    await _flightRepository.Update(Flight);
+                }
+            }
+
+            var routeValues = new RouteValueDictionary
+            {
+                {"id", Flight.FlightId}
+            };
+            string url = "Details";
+            return RedirectToAction(url, routeValues);
+        }
+
+        //[AllowAnonymous]
+        public async Task<ViewResult> List()
+        {
+            FlightListViewModel flightListViewModel = new FlightListViewModel
+            {
+                Flights = await _flightRepository.AllFlights(),
+                CurrentUser = User.Identity.Name
+            };
+
+            return View("FlightList", flightListViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FindFlights(SearchFlightsViewModel searchFlightsViewModel)
+        {
+            this.Flights = _flightRepository.SearchFlights(searchFlightsViewModel.DepartureCity,
+                searchFlightsViewModel.DestinationCity, searchFlightsViewModel.DepartureDateTime,
+                searchFlightsViewModel.DirectFlight).Result.ToList();
+
+            if (searchFlightsViewModel.DepartureDateTime == DateTime.MinValue &&
+                searchFlightsViewModel.DepartureCity == City.BEOGRAD &&
+                searchFlightsViewModel.DestinationCity == City.BEOGRAD)
+            {
+                Flights = _flightRepository.AllFlights().Result.ToList();
+            }
+            else
+            {
+                Flights = _flightRepository.SearchFlights(searchFlightsViewModel.DepartureCity,
+                    searchFlightsViewModel.DestinationCity, searchFlightsViewModel.DepartureDateTime,
+                    searchFlightsViewModel.DirectFlight).Result.ToList();
+            }
+
+            var viewModel = new FlightListViewModel
+            {
+                Flights = Flights,
+                DirectFlightsOnly = searchFlightsViewModel.DirectFlight,
+                SearchFlightsViewModel = searchFlightsViewModel
+            };
+
+            return View("FlightList", viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterDirectFlights(FlightListViewModel flightListModel)
+        {
+            var viewModel = new FlightListViewModel
+            {
+                Flights = _flightRepository.SearchFlights(flightListModel.SearchFlightsViewModel.DepartureCity,
+                    flightListModel.SearchFlightsViewModel.DestinationCity, flightListModel.SearchFlightsViewModel.DepartureDateTime,
+                    flightListModel.SearchFlightsViewModel.DirectFlight).Result.ToList()
+            };
 
 
-		//[AllowAnonymous]
-		public async Task<ViewResult> List()
-		{
-			FlightListViewModel flightListViewModel = new FlightListViewModel
-			{
-				Flights = await _flightRepository.AllFlights(),
-				CurrentUser = User.Identity.Name
-			};
+            return View("FlightList", viewModel);
+        }
 
-			return View(flightListViewModel);
-		}
+        public async Task<IActionResult> Details(int id)
+        {
+            var flight = await _flightRepository.GetFlightById(id);
+            if (flight == null)
+            {
+                return NotFound();
+            }
 
-		[HttpPost]
-		public async Task<IActionResult> FindFlights(SearchFlightsViewModel searchFlightsViewModel)
-		{
-			if (searchFlightsViewModel.DepartureDateTime == DateTime.MinValue)
-			{
-				Flights = _flightRepository.AllFlights().Result.ToList();
-			}
-			else
-			{
-					Flights = _flightRepository.SearchFlights(searchFlightsViewModel.DepartureCity,
-					searchFlightsViewModel.DestinationCity, searchFlightsViewModel.DepartureDateTime, searchFlightsViewModel.DirectFlight).Result.ToList();
-			}
+            var viewModel = new FlightDetailsViewModel
+            {
+                Flight = flight
+            };
 
-			var viewModel = new FlightListViewModel
-			{
-				Flights = Flights,
-				DirectFlightsOnly = searchFlightsViewModel.DirectFlight,
-				SearchFlightsViewModel = searchFlightsViewModel
-			};
+            return View(viewModel);
+        }
 
-			return View(viewModel);
-		}
+        [Authorize(Policy = "IsAgent")]
+        public async Task<IActionResult> Upsert(int? id)
+        {
+            var viewModel = new FlightDetailsViewModel
+            {
+            Flight = new Flight()
+            };
+            if (id == null)
+            {
+                viewModel.Flight.DepartureDateTime = DateTime.Today;
+                //create
+                return View(viewModel);
+            }
 
-		[HttpPost]
-		public async Task<IActionResult> FilterDirectFlights(FlightListViewModel flightListModel)
-		{
-			return View("FindFlights",flightListModel);
-		}
+            //update
+            viewModel.Flight = await _flightRepository.GetFlightById((int) id);
+            if (viewModel.Flight == null)
+            {
+                return NotFound();
+            }
 
-		public IActionResult Details(int id)
-		{
-			var flight = _flightRepository.GetFlightById(id);
-			if (flight == null)
-			{
-				return NotFound();
-			}
-			var viewModel = new FlightDetailsViewModel
-			{
-				Flight = flight
-			};
+            return View(viewModel);
+        }
 
-			return View(viewModel);
-		}
-		[Authorize(Policy = "IsAgent")]
-		public IActionResult Upsert(int? id)
-		{
-			Flight = new Flight();
-			if (id == null)
-			{
-				Flight.DepartureDateTime = DateTime.Today;
-				//create
-				return View(Flight);
-			}
-			//update
-			Flight = _flightRepository.GetFlightById((int)id);
-			if (Flight == null)
-			{
-				return NotFound();
-			}
-			return View(Flight);
-		}
+        public async Task<IActionResult> Select(int? id)
+        {
+            Flight = await _flightRepository.GetFlightById((int) id);
+            return View("Details", new FlightDetailsViewModel
+            {
+                Flight = Flight,
+                NumberOfSeats = 1
+            });
+        }
 
-		public IActionResult Select(int? id)
-		{
-
-			Flight = _flightRepository.GetFlightById((int)id);
-			return View("Details", new FlightDetailsViewModel
-			{
-				Flight = Flight,
-				NumberOfSeats = 1
-			});
-
-		}
-
-		public async Task<IActionResult> BackToList()
-		{
-			var flights = await _flightRepository.AllFlights();
-			var viewModel = new SearchFlightsViewModel
-			{
-				Flights = flights
-			};
-
-			var result = await _authorizationService.AuthorizeAsync(User, "IsAgent");
-			if (result.Succeeded)
-			{
-				return View("IndexAgentView", viewModel);
-			}
-
-			return View("FindFlights", viewModel);
-		}
-
-	}
+        // [HttpPost]
+        // public async Task<IActionResult> BackToList(FlightDetailsViewModel flightDetailsViewModel)
+        // {
+        //     var result = await _authorizationService.AuthorizeAsync(User, "IsAgent");
+        //     return await FindFlights(flightDetailsViewModel.SearchFlightsViewModel);
+        // }
+    }
 }
