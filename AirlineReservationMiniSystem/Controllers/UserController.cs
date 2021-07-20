@@ -15,15 +15,19 @@ namespace AirlineReservationMiniSystem.Controllers
 	{
 		private readonly List<UserViewModel> userViewModels = new List<UserViewModel>();
 		private readonly IUserRepository _userRepository;
+		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IRoleRepository _roleRepository;
+		private readonly IReservationRepository _reservationRepository;
 
 		[BindProperty] public UserViewModel Input { get; set; }
 
 
-		public UserController(IUserRepository userRepository, IRoleRepository roleRepository)
+		public UserController(IUserRepository userRepository, IRoleRepository roleRepository, IReservationRepository reservationRepository, UserManager<ApplicationUser> userManager)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
+			_reservationRepository = reservationRepository;
+			_userManager = userManager;
 		}
 
 		public async Task<IActionResult> Index()
@@ -111,15 +115,35 @@ namespace AirlineReservationMiniSystem.Controllers
 		}
 
 
-		public async Task<IActionResult> ViewStats(string id)
+		public async Task<IActionResult> ViewAgentStats()
 		{
-			var user = _userRepository.GetUserById(id);
-			if (user == null)
+			var agentsViewModelList = new List<UserViewModel>();
+			
+			var agents = await _userManager.GetUsersInRoleAsync("Agent");
+			var identityRole = await _roleRepository.GetRoleByUserId(agents.First().Id);
+			
+			if (identityRole == null)
 			{
-				return Json(new { success = false, message = "Error while retrieving the user" });
+				return Json(new { success = false, message = "Error while retrieving the role" });
 			}
-
-			return View("Index");
+			
+			foreach (var agent in agents)
+			{
+				agentsViewModelList.Add(
+					new UserViewModel
+					{
+						User = agent,
+						Role = identityRole,
+						NumberOfApprovedReservations = await _reservationRepository.CountReservationsByAgentId(agent.Id)
+					});
+			}
+			
+			var viewModel = new GroupedUserViewModel
+			{
+				Agents = agentsViewModelList
+			};
+			
+			return View("AgentStatistics",viewModel);
 		}
 		private async Task<GroupedUserViewModel> GetAllUsers()
 		{

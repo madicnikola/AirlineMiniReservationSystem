@@ -17,5 +17,7 @@ namespace AirlineReservationMiniSystem.Models
         public DateTime DateOfReservation { get; set; }
         public ReservationStatus Status { get; set; }
         public int NumberOfReservedSeats { get; set; }
-    }
+
+		public string AgentId { get; set; }
+	}
 }

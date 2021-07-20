@@ -871,3 +871,5 @@ C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservati
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Flight\FlightList.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Reservation\Index.cshtml.g.cs
 C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\Reservation\_ReservationList.cshtml.g.cs
+C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\User\AgentStatistics.cshtml.g.cs
+C:\Users\Nikola\Desktop\AVIO KARTE\AirlineReservationMiniSystem\AirlineReservationMiniSystem\obj\Debug\netcoreapp3.1\Razor\Views\User\_UserList.cshtml.g.cs

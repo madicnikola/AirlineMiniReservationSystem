@@ -20,19 +20,17 @@ namespace AirlineReservationMiniSystem.Controllers
 		private readonly IReservationRepository _reservationRepository;
 		private readonly IFlightRepository _flightRepository;
 		private readonly IUserRepository _userRepository;
-		private readonly IAgentReservationRepository _agentReservationRepository;
 		private readonly IAuthorizationService _authorizationService;
 
 		
 
-		public ReservationController(IHubContext<ReservationHub> reservationHub, IFlightRepository flightRepository, IReservationRepository reservationRepository, IUserRepository userRepository, IAuthorizationService authorizationService, IAgentReservationRepository agentReservationRepository)
+		public ReservationController(IHubContext<ReservationHub> reservationHub, IFlightRepository flightRepository, IReservationRepository reservationRepository, IUserRepository userRepository, IAuthorizationService authorizationService)
 		{
 			_reservationHub = reservationHub;
 			_flightRepository = flightRepository;
 			_reservationRepository = reservationRepository;
 			_userRepository = userRepository;
 			_authorizationService = authorizationService;
-			_agentReservationRepository = agentReservationRepository;
 		}
 
 		public async Task<IActionResult> Index()
@@ -43,7 +41,7 @@ namespace AirlineReservationMiniSystem.Controllers
 				var userId = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 				var viewModel = new ReservationsViewModel
 				{
-					Reservations = await _reservationRepository.getReservationsByUserId(userId)
+					Reservations = await _reservationRepository.GetReservationsByUserId(userId)
 				};
 			
 				return View(viewModel);
@@ -99,9 +97,8 @@ namespace AirlineReservationMiniSystem.Controllers
 			await _flightRepository.Update(flight);
 			reservation.Flight =flight;
 			reservation.Status = ReservationStatus.CONFIRMED;
+			reservation.AgentId = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 			await _reservationRepository.Update(reservation);
-			await addAgentReservation(reservation);
-
 			await notifyClients(reservation);
 			
 			return Accepted(reservation.ReservationId);
@@ -125,36 +122,14 @@ namespace AirlineReservationMiniSystem.Controllers
 			
 			reservation.Flight =flight;
 			reservation.Status = ReservationStatus.DECLINED;
-			
+			reservation.AgentId = null;
 			await _reservationRepository.Update(reservation);
-			await removeAgentReservation(reservation);
 			await notifyClients(reservation);
 
 			return Accepted(reservation.ReservationId);
 		}
 
-		
 
-		private async Task addAgentReservation(Reservation reservation)
-		{
-			var userId = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
-			await _agentReservationRepository.Add(new AgentReservation
-			{
-				UserId = userId,
-				User = await _userRepository.GetUserById(userId),
-				ReservationId = reservation.ReservationId,
-				Reservation = reservation,
-			});
-		}
-		
-		private async Task removeAgentReservation(Reservation reservation)
-		{
-			await _agentReservationRepository.Delete(new AgentReservation
-			{
-				ReservationId = reservation.ReservationId
-			});
-		}
-		
 		private async Task notifyClients(Reservation reservation)
 		{
 			await _reservationHub.Clients.Group("Client").SendAsync("ReceiveReservationUpdate",

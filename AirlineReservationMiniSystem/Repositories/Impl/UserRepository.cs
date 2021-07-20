@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AirlineReservationMiniSystem.Repositories;
 
 namespace AirlineReservationMiniSystem
 {
 	public class UserRepository : IUserRepository 
 	{
 		private readonly IdentityContext _identityContext;
-
 
 		public UserRepository(IdentityContext identityContext)
 		{

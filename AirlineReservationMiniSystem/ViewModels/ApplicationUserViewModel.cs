@@ -22,5 +22,7 @@ namespace AirlineReservationMiniSystem.ViewModels
 	{
 		public ApplicationUser User { get; set; }
 		public IdentityRole Role { get; set; }
+
+		public int NumberOfApprovedReservations { get; set; }
 	}
 }

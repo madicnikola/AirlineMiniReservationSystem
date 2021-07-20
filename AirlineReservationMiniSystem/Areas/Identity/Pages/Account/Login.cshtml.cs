@@ -24,15 +24,13 @@ namespace AirlineReservationMiniSystem.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IHubContext<ReservationHub> _reservationHub;
 
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager, IHubContext<ReservationHub> reservationHub)
+            UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _reservationHub = reservationHub;
             _signInManager = signInManager;
             _logger = logger;
         }

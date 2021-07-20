@@ -19,7 +19,13 @@ namespace AirlineReservationMiniSystem.Models
 
 		Task<Reservation> GetReservationByUserAndFLightAndDate(int flightFlightId, string userId, DateTime reservationDateOfReservation);
 
-		Task<List<Reservation>> getReservationsByUserId(string userId);
+		Task<List<Reservation>> GetReservationsByUserId(string userId);
+
+		Task<List<Reservation>> GetReservationsByAgentId(string agentId);
+		
+		Task<int> CountReservationsByAgentId(string agentId);
+
+
 		Task<int> DeleteReservationsByFlightId(int id);
 	}
 }

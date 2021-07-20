@@ -46,9 +46,20 @@ namespace AirlineReservationMiniSystem.Models
                                                                        r.DateOfReservation == DateOfReservation);
         }
 
-        public Task<List<Reservation>> getReservationsByUserId(string userId)
+        public Task<List<Reservation>> GetReservationsByUserId(string userId)
         {
             return _appDbContext.Reservations.Where(r => r.UserId == userId).Include(r => r.Flight).ToListAsync();
+        }
+
+        public Task<List<Reservation>> GetReservationsByAgentId(string agentId)
+        {
+            return _appDbContext.Reservations.Where(r => r.AgentId == agentId).Include(r => r.Flight).ToListAsync();
+        }
+
+        public Task<int> CountReservationsByAgentId(string agentId)
+        {
+            return _appDbContext.Reservations.CountAsync(r => r.AgentId == agentId);
+
         }
 
         public Task<int> DeleteReservationsByFlightId(int id)

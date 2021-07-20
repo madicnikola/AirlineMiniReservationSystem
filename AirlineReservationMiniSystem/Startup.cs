@@ -36,7 +36,6 @@ namespace AirlineReservationMiniSystem
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IReservationRepository, ReservationRepository>();
 			services.AddScoped<IRoleRepository, RoleRepository>();
-			services.AddScoped<IAgentReservationRepository, AgentReservationRepository>();
 
 
 			services.AddSignalR(c => c.EnableDetailedErrors = true);
