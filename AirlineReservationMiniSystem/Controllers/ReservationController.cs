@@ -104,8 +104,6 @@ namespace AirlineReservationMiniSystem.Controllers
 			return Accepted(reservation.ReservationId);
 		}
 
-		
-
 		[HttpPost]
 		[AllowAnonymous]
 		public async Task<IActionResult> CancelReservation([FromBody] int reservationId)
