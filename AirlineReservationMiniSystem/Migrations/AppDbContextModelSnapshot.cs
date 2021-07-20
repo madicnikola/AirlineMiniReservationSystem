@@ -19,6 +19,26 @@ namespace AirlineReservationMiniSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AirlineReservationMiniSystem.Models.AgentReservation", b =>
+                {
+                    b.Property<int>("ReservationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ReservationId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReservationId");
+
+                    b.HasIndex("ReservationId1");
+
+                    b.ToTable("AgentReservations");
+                });
+
             modelBuilder.Entity("AirlineReservationMiniSystem.Models.Flight", b =>
                 {
                     b.Property<int>("FlightId")
@@ -91,7 +111,7 @@ namespace AirlineReservationMiniSystem.Migrations
                     b.Property<DateTime>("DateOfReservation")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FlightId")
+                    b.Property<int>("FlightId")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfReservedSeats")
@@ -110,11 +130,22 @@ namespace AirlineReservationMiniSystem.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("AirlineReservationMiniSystem.Models.AgentReservation", b =>
+                {
+                    b.HasOne("AirlineReservationMiniSystem.Models.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AirlineReservationMiniSystem.Models.Reservation", b =>
                 {
                     b.HasOne("AirlineReservationMiniSystem.Models.Flight", "Flight")
                         .WithMany()
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

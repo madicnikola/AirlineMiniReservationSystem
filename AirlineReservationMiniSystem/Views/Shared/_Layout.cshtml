@@ -34,12 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Flight" asp-action="Index">Flights</a>
                     </li>
-                    @if (isClientAuthorizationResult.Succeeded)
-                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="Index">My Reservations</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="Index">@(isClientAuthorizationResult.Succeeded ? "My Reservations" : "Reservations")</a>
                         </li>
-                    }
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
                     </li>
@@ -63,7 +60,8 @@
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/Reservation.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/toastr/build/toastr.min.js"></script>
 <script src="~/js/signalr.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @RenderSection("Scripts", required: false)

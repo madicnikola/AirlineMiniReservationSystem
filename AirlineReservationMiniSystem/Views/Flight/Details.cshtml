@@ -76,18 +76,18 @@
                 <span asp-validation-for="Flight.NumberOfConnections" class="text-danger"></span>
             </div>
         </div>
-        @if (isClientAuthorizationResult.Succeeded)
-        {
-            <div class="form-group row">
-                <div class="col-3">
-                    <label asp-for="NumberOfSeats"></label>
-                </div>
-                <div class="col-6">
-                    <input id="NumberOfSeats" asp-for="NumberOfSeats" class="form-control">
-                    <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
-                </div>
-            </div>
-        }
+          @if (isClientAuthorizationResult.Succeeded)
+          {
+              <div class="form-group row">
+                  <div class="col-3">
+                      <label asp-for="NumberOfSeats"></label>
+                  </div>
+                  <div class="col-6">
+                      <input id="NumberOfSeats" asp-for="NumberOfSeats" value="1" class="form-control">
+                      <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
+                  </div>
+              </div>
+          }
 
     <div class="form-group row">
         <div class="col-3 offset-3">
@@ -111,6 +111,7 @@
         }
     </div>
 </form>
+<script src="~/js/Reservation.js"></script>
 </div>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />

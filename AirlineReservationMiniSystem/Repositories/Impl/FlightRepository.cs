@@ -52,6 +52,12 @@ namespace AirlineReservationMiniSystem.Models
 			return _appDbContext.SaveChangesAsync();
 		}
 
+		public Task<int> Delete(Flight flight)
+		{
+			_appDbContext.Flights.Remove(flight);
+			return _appDbContext.SaveChangesAsync();
+		}
+
 		public Task<int> SaveChanges()
 		{
 			return _appDbContext.SaveChangesAsync();

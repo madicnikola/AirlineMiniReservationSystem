@@ -1,0 +1,78 @@
+﻿@model ReservationsViewModel
+@inject IAuthorizationService AuthorizationService
+@{
+    var isAgentAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAgent");
+    var isClientAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsClient");
+    var isAdminAuthorizationResult = await AuthorizationService
+        .AuthorizeAsync(User, "IsAdmin");
+}
+
+<div class="col-12 border p-3">
+    <form method="post">
+        @if (Model.Reservations.Any())
+        {
+            <table class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Departure City</th>
+                    <th>Destination City</th>
+                    <th>Departure Time</th>
+                    <th>Date of Reservation</th>
+                    <th>Number of Free Seats</th>
+                    <th>Reserved Seats</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+
+                </thead>
+                @foreach (var item in Model.Reservations)
+                {
+                    <tr>
+                        <td class="@item.ReservationId">
+                            @Html.DisplayFor(m => item.ReservationId)
+                            @* <input type="hidden" id="reservationId" value="@item.ReservationId"> *@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Flight.DepartureCity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Flight.DestinationCity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.Flight.DepartureDateTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.DateOfReservation)
+                        </td>
+                        <td id="FreeSeats @item.ReservationId">
+                            @Html.DisplayFor(m => item.Flight.NumberOfFreeSeats)
+                        </td>
+                        <td id="NumberOfSeats @item.ReservationId">
+                            @Html.DisplayFor(m => item.NumberOfReservedSeats)
+                        </td>
+                        <td id="Status @item.ReservationId" class="Status @item.ReservationId">
+                            @Html.DisplayFor(m => item.Status)
+                            @* <input  type="hidden" class="status" value="@item.Status"> *@
+                        </td>
+                        @if (isAgentAuthorizationResult.Succeeded)
+                        {
+                            <td>
+                                <a id="Approve @item.ReservationId" class="btn btn-success btn-sm text-white approve" onClick=onApprove(@(item.ReservationId),@(item.NumberOfReservedSeats)) 
+                                   style="@(item.Status.ToString() != "CONFIRMED" ? "display:block" : "display:none")">Approve</a>
+                                <a id="Cancel @item.ReservationId" class="btn btn-danger btn-sm text-white" onClick=onCancel(@(item.ReservationId))
+                                   style="@(item.Status.ToString() != "CONFIRMED" ? "display:none" : "display:block")">Cancel</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No Reservations available.</p>
+        }
+    </form>
+</div>

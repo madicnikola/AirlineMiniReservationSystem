@@ -19,12 +19,7 @@ namespace AirlineReservationMiniSystem
 			_identityContext = identityContext;
 		}
 
-		public Task<List<ApplicationUser>> AllUsers {
-			get
-			{
-			return _identityContext.Users.ToListAsync();
-			}
-		}
+		public Task<List<ApplicationUser>> AllUsers => _identityContext.Users.ToListAsync();
 
 		public async Task<ApplicationUser> GetUserById(string userId)
 		{

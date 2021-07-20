@@ -52,6 +52,11 @@ namespace AirlineReservationMiniSystem.Models
 			throw new NotImplementedException();
 		}
 
+		public Task<int> Delete(Flight flight)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task<int> SaveChanges()
 		{
 			throw new NotImplementedException();

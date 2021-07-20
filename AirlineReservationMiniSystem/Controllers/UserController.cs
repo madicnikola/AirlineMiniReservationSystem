@@ -111,8 +111,16 @@ namespace AirlineReservationMiniSystem.Controllers
 		}
 
 
+		public async Task<IActionResult> ViewStats(string id)
+		{
+			var user = _userRepository.GetUserById(id);
+			if (user == null)
+			{
+				return Json(new { success = false, message = "Error while retrieving the user" });
+			}
 
-
+			return View("Index");
+		}
 		private async Task<GroupedUserViewModel> GetAllUsers()
 		{
 			List<ApplicationUser> users = _userRepository.AllUsers.Result;
@@ -132,7 +140,9 @@ namespace AirlineReservationMiniSystem.Controllers
 			};
 			return model;
 		}
-
+		
+		
+		
 		//var allusers = _userRepository.AllUsers.ToList();
 		//var users = allusers.Where(x => x.Roles.Select(role => role.Name).Contains("Client")).ToList();
 		//var userVM = users.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();

@@ -15,5 +15,5 @@ namespace AirlineReservationMiniSystem.Areas.Identity.Data
 		public string Surname { get; set; }
 		public string Password { get; set; }
 		public IdentityRole Role { get; set; }
-	}
+    }
 }

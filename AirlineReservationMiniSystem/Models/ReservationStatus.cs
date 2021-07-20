@@ -7,8 +7,8 @@ namespace AirlineReservationMiniSystem.Models
 {
 	public enum ReservationStatus
 	{
-		PENDING,
-		CONFIRMED,
-		DECLINED
+		PENDING = 0,
+		CONFIRMED = 1,
+		DECLINED =2
 	}
 }

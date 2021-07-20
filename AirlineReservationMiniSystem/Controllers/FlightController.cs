@@ -92,8 +92,7 @@ namespace AirlineReservationMiniSystem.Controllers
                 searchFlightsViewModel.DestinationCity, searchFlightsViewModel.DepartureDateTime,
                 searchFlightsViewModel.DirectFlight).Result.ToList();
 
-            if (searchFlightsViewModel.DepartureDateTime == DateTime.MinValue &&
-                searchFlightsViewModel.DepartureCity == City.BEOGRAD &&
+            if (searchFlightsViewModel.DepartureCity == City.BEOGRAD &&
                 searchFlightsViewModel.DestinationCity == City.BEOGRAD)
             {
                 Flights = _flightRepository.AllFlights().Result.ToList();
@@ -178,6 +177,27 @@ namespace AirlineReservationMiniSystem.Controllers
                 NumberOfSeats = 1
             });
         }
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id  == 0)
+            {
+                return Json(new { success = false, message = "Error while Deleting" });
+            }
+
+            await _reservationRepository.DeleteReservationsByFlightId(id);
+            var flight = await _flightRepository.GetFlightById(id);
+            await _flightRepository.Delete(flight);
+            return View("FlightList", new FlightListViewModel
+            {
+                Flights = await _flightRepository.AllFlights()
+            });
+        }
+        
+        
+        
+        
+        
 
         // [HttpPost]
         // public async Task<IActionResult> BackToList(FlightDetailsViewModel flightDetailsViewModel)

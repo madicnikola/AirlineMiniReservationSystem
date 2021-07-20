@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Authorization\" />
+    <Folder Include="wwwroot\scripts" />
   </ItemGroup>
 
   <ItemGroup>

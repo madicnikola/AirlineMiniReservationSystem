@@ -15,6 +15,8 @@ namespace AirlineReservationMiniSystem.Models
 		Task<int> Add(Flight flight);
 		Task<int> Update(Flight flight);
 
+		Task<int> Delete(Flight flight);
+
 		Task<int> SaveChanges();
 	}
 }

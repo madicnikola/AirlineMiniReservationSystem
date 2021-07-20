@@ -1,3 +1,4 @@
+using AirlineReservationMiniSystem.Hubs;
 using AirlineReservationMiniSystem.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +36,8 @@ namespace AirlineReservationMiniSystem
 			services.AddScoped<IUserRepository, UserRepository>();
 			services.AddScoped<IReservationRepository, ReservationRepository>();
 			services.AddScoped<IRoleRepository, RoleRepository>();
+			services.AddScoped<IAgentReservationRepository, AgentReservationRepository>();
+
 
 			services.AddSignalR(c => c.EnableDetailedErrors = true);
 			//services.AddTransient()
@@ -71,6 +74,7 @@ namespace AirlineReservationMiniSystem
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+			// app.UseSignalR(routes => routes.MapHub<ReservationHub>("/reservationhub"));
 
 			app.UseEndpoints(endpoints =>
 			{
@@ -78,6 +82,7 @@ namespace AirlineReservationMiniSystem
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
 				endpoints.MapRazorPages();
+				endpoints.MapHub<ReservationHub>("/reservationhub");
 			});
 		}
 	}
