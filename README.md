@@ -29,7 +29,6 @@
     ·
     <a href="https://github.com/madicnikola/AirlineMiniReservationSystem/issues">Request Feature</a>
   </p>
-</p>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -70,4 +69,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 ## Contact
+LinkedIn: [/in/madicnikola/](https://www.linkedin.com/in/madicnikola)
+<br />
 Project Link: [https://github.com/madicnikola/AirlineMiniReservationSystem](https://github.com/madicnikola/AirlineMiniReservationSystem)
