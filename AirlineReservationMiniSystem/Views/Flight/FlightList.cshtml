@@ -51,7 +51,7 @@
                     </thead>
                     @foreach (var item in Model.Flights)
                     {
-                        <tr>
+                        <tr style="@(isAgentAuthorizationResult.Succeeded ? (item.NumberOfFreeSeats <= 5 ? "background-color:#ff2c2f !important;" : "background-color:transparent;") : "" )">
                             <td>
                                 @Html.DisplayFor(m => item.DepartureCity)
                             </td>
@@ -71,7 +71,7 @@
                                 @Html.DisplayFor(m => item.NumberOfConnections)
                             </td>
 
-                            <td>
+                            <td style="background-color: #fff !important;">
                                 @if (isAdminAuthorizationResult.Succeeded)
                                 {
                                     <button asp-action="Delete" asp-route-id="@item.FlightId" onclick="return confirm('Are you sure you want to cancel a Flight?')" class="btn btn-danger btn-sm">Cancel</button>

@@ -19,7 +19,6 @@ namespace AirlineReservationMiniSystem.Areas.Identity
 		protected override async Task<ClaimsIdentity> GenerateClaimsAsync(ApplicationUser user)
 		{
 			var identity = await base.GenerateClaimsAsync(user);
-
 			identity.AddClaim(new Claim("Name", user.Name));
 
 			return identity;

@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using AirlineReservationMiniSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace AirlineReservationMiniSystem.Hubs
 {
+	[Authorize]
 	public class ReservationHub: Hub
 	{
 		private readonly IReservationRepository _reservationRepository;

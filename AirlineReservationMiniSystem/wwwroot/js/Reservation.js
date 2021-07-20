@@ -1,12 +1,8 @@
-﻿// Modify code below for AJAX call to controller for Flight Reservation Request
-
-document.getElementById("submitReservation").addEventListener("click", e => {
+﻿document.getElementById("submitReservation").addEventListener("click", e => {
     e.preventDefault();
     const flightId = parseInt(document.getElementById("FlightId").value);
     const numberOfSeats = parseInt(document.getElementById("NumberOfSeats").value);
-    console.log(flightId);
-    console.log(numberOfSeats);
-    
+
     fetch("/Reservation/RequestReservation",
         {
             method: "POST",
@@ -17,8 +13,8 @@ document.getElementById("submitReservation").addEventListener("click", e => {
         })
         .then(response => response.text())
         .then(id => {
-            console.log(id);
+            console.log("rez ID ---> " + id);
+            alert("Reservation request sent successfully!");
             connection.invoke("JoinRoom", "Client");
-            toastr.success("Reservation request sent");
         });
 });

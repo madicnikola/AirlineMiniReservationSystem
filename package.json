@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/madicnikola/AirlineMiniReservationSystem#readme",
   "dependencies": {
-    "@aspnet/signalr": "^1.0.27",
-    "toastr": "^2.1.4"
+    "@aspnet/signalr": "^1.0.27"
   }
 }

@@ -15,21 +15,16 @@ namespace AirlineReservationMiniSystem.Controllers
     {
         private readonly IFlightRepository _flightRepository;
         private readonly IReservationRepository _reservationRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IAuthorizationService _authorizationService;
 
         [BindProperty] public Flight Flight { get; set; }
 
         public List<Flight> Flights { get; set; }
 
-        [BindProperty] public FlightListViewModel FlightListModel { get; set; }
-
-        public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository,
-            IUserRepository userRepository, IAuthorizationService authorizationService)
+        public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository, IAuthorizationService authorizationService)
         {
             _flightRepository = flightRepository;
             _reservationRepository = reservationRepository;
-            _userRepository = userRepository;
             _authorizationService = authorizationService;
         }
 
@@ -73,7 +68,6 @@ namespace AirlineReservationMiniSystem.Controllers
             return RedirectToAction(url, routeValues);
         }
 
-        //[AllowAnonymous]
         public async Task<ViewResult> List()
         {
             FlightListViewModel flightListViewModel = new FlightListViewModel
@@ -117,15 +111,27 @@ namespace AirlineReservationMiniSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> FilterDirectFlights(FlightListViewModel flightListModel)
         {
-            var viewModel = new FlightListViewModel
+            if (flightListModel.SearchFlightsViewModel.DepartureCity == City.BEOGRAD &&
+                flightListModel.SearchFlightsViewModel.DestinationCity == City.BEOGRAD)
             {
-                Flights = _flightRepository.SearchFlights(flightListModel.SearchFlightsViewModel.DepartureCity,
-                    flightListModel.SearchFlightsViewModel.DestinationCity, flightListModel.SearchFlightsViewModel.DepartureDateTime,
-                    flightListModel.SearchFlightsViewModel.DirectFlight).Result.ToList()
-            };
+                var model = new FlightListViewModel
+                {
+                    Flights = _flightRepository.AllFlights().Result.Where(f =>  !flightListModel.SearchFlightsViewModel.DirectFlight || f.NumberOfConnections == 0).ToList()
+                };
 
+                return View("FlightList", model);
+            }
+
+            var viewModel = new FlightListViewModel
+                {
+                    Flights = _flightRepository.SearchFlights(flightListModel.SearchFlightsViewModel.DepartureCity,
+                        flightListModel.SearchFlightsViewModel.DestinationCity,
+                        flightListModel.SearchFlightsViewModel.DepartureDateTime,
+                        flightListModel.SearchFlightsViewModel.DirectFlight).Result.ToList()
+                };
 
             return View("FlightList", viewModel);
+
         }
 
         public async Task<IActionResult> Details(int id)
@@ -193,17 +199,5 @@ namespace AirlineReservationMiniSystem.Controllers
                 Flights = await _flightRepository.AllFlights()
             });
         }
-        
-        
-        
-        
-        
-
-        // [HttpPost]
-        // public async Task<IActionResult> BackToList(FlightDetailsViewModel flightDetailsViewModel)
-        // {
-        //     var result = await _authorizationService.AuthorizeAsync(User, "IsAgent");
-        //     return await FindFlights(flightDetailsViewModel.SearchFlightsViewModel);
-        // }
     }
 }

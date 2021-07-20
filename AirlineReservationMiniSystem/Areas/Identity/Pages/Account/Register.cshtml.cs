@@ -21,6 +21,7 @@ using System.ComponentModel;
 namespace AirlineReservationMiniSystem.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    //[Authorize(Policy = "IsAdmin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

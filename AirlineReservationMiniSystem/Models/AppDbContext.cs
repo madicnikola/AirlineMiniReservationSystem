@@ -23,7 +23,7 @@ namespace AirlineReservationMiniSystem.Models
 			Flight f1 = new Flight { FlightId = 1, DepartureCity = City.BEOGRAD, DestinationCity = City.NIS, DepartureDateTime = new DateTime(), NumberOfFreeSeats = 100, TotalNumberOfSeats = 100 };
 			Flight f2 = new Flight { FlightId = 2, DepartureCity = City.NIS, DestinationCity = City.PRISTINA, DepartureDateTime = new DateTime(), NumberOfFreeSeats = 100, TotalNumberOfSeats = 100 };
 			Flight f3 = new Flight { FlightId = 3, DepartureCity = City.BEOGRAD, DestinationCity = City.KRALJEVO, DepartureDateTime = new DateTime(), NumberOfFreeSeats = 100, TotalNumberOfSeats = 100 };
-
+			
 			
 			
 			modelBuilder.Entity<Flight>().HasData(f1);

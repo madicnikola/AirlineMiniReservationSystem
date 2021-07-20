@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace AirlineReservationMiniSystem.Controllers
 {
+	
+	// Include this ->
+	// [Authorize(Policy = "IsAdmin")]
 	public class UserController : Controller
 	{
 		private readonly List<UserViewModel> userViewModels = new List<UserViewModel>();
@@ -114,7 +117,6 @@ namespace AirlineReservationMiniSystem.Controllers
 			return RedirectToAction("Index");
 		}
 
-
 		public async Task<IActionResult> ViewAgentStats()
 		{
 			var agentsViewModelList = new List<UserViewModel>();
@@ -164,15 +166,5 @@ namespace AirlineReservationMiniSystem.Controllers
 			};
 			return model;
 		}
-		
-		
-		
-		//var allusers = _userRepository.AllUsers.ToList();
-		//var users = allusers.Where(x => x.Roles.Select(role => role.Name).Contains("Client")).ToList();
-		//var userVM = users.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
-
-		//var admins = allusers.Where(x => x.Roles.Select(role => role.Name).Contains("Admin")).ToList();
-		//var adminsVM = admins.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
-		//var model = new GroupedUserViewModel { Clients = userVM, Admins = adminsVM };
 	}
 }

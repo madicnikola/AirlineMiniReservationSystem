@@ -59,7 +59,7 @@ namespace AirlineReservationMiniSystem.Controllers
 
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Policy = "IsClient")]
 		public async Task<IActionResult> RequestReservation([FromBody]ReservationRequest reservationRequest)
 		{
 			var userId = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
@@ -83,7 +83,7 @@ namespace AirlineReservationMiniSystem.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Policy = "IsAgent")]
 		public async Task<IActionResult> ApproveReservation([FromBody] ReservationApproveRequest reservationRequest)
 		{
 			var reservation = await _reservationRepository.GetReservationById(reservationRequest.ReservationId);
@@ -105,7 +105,7 @@ namespace AirlineReservationMiniSystem.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
+		[Authorize(Policy = "IsAgent")]
 		public async Task<IActionResult> CancelReservation([FromBody] int reservationId)
 		{
 			var reservation = await _reservationRepository.GetReservationById(reservationId);
