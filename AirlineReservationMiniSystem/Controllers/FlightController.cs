@@ -21,7 +21,8 @@ namespace AirlineReservationMiniSystem.Controllers
 
         public List<Flight> Flights { get; set; }
 
-        public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository, IAuthorizationService authorizationService)
+        public FlightController(IFlightRepository flightRepository, IReservationRepository reservationRepository,
+            IAuthorizationService authorizationService)
         {
             _flightRepository = flightRepository;
             _reservationRepository = reservationRepository;
@@ -116,22 +117,22 @@ namespace AirlineReservationMiniSystem.Controllers
             {
                 var model = new FlightListViewModel
                 {
-                    Flights = _flightRepository.AllFlights().Result.Where(f =>  !flightListModel.SearchFlightsViewModel.DirectFlight || f.NumberOfConnections == 0).ToList()
+                    Flights = _flightRepository.AllFlights().Result.Where(f =>
+                        !flightListModel.SearchFlightsViewModel.DirectFlight || f.NumberOfConnections == 0).ToList()
                 };
 
                 return View("FlightList", model);
             }
 
             var viewModel = new FlightListViewModel
-                {
-                    Flights = _flightRepository.SearchFlights(flightListModel.SearchFlightsViewModel.DepartureCity,
-                        flightListModel.SearchFlightsViewModel.DestinationCity,
-                        flightListModel.SearchFlightsViewModel.DepartureDateTime,
-                        flightListModel.SearchFlightsViewModel.DirectFlight).Result.ToList()
-                };
+            {
+                Flights = _flightRepository.SearchFlights(flightListModel.SearchFlightsViewModel.DepartureCity,
+                    flightListModel.SearchFlightsViewModel.DestinationCity,
+                    flightListModel.SearchFlightsViewModel.DepartureDateTime,
+                    flightListModel.SearchFlightsViewModel.DirectFlight).Result.ToList()
+            };
 
             return View("FlightList", viewModel);
-
         }
 
         public async Task<IActionResult> Details(int id)
@@ -155,7 +156,7 @@ namespace AirlineReservationMiniSystem.Controllers
         {
             var viewModel = new FlightDetailsViewModel
             {
-            Flight = new Flight()
+                Flight = new Flight()
             };
             if (id == null)
             {
@@ -183,12 +184,13 @@ namespace AirlineReservationMiniSystem.Controllers
                 NumberOfSeats = 1
             });
         }
+
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (id  == 0)
+            if (id == 0)
             {
-                return Json(new { success = false, message = "Error while Deleting" });
+                return Json(new {success = false, message = "Error while Deleting"});
             }
 
             await _reservationRepository.DeleteReservationsByFlightId(id);

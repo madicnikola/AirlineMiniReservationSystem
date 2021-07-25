@@ -43,7 +43,7 @@ namespace AirlineReservationMiniSystem.Controllers
 				{
 					Reservations = await _reservationRepository.GetReservationsByUserId(userId)
 				};
-			
+				
 				return View(viewModel);
 			}
 			else
